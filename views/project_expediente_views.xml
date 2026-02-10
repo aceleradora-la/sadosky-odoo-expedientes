@@ -5,7 +5,7 @@
         <field name="name">project.expediente.tree</field>
         <field name="model">project.project</field>
         <field name="arch" type="xml">
-            <tree string="Expedientes" decoration-info="expediente_estado == 'en_tramite'" 
+            <list string="Expedientes" decoration-info="expediente_estado == 'en_tramite'" 
                   decoration-warning="expediente_estado == 'suspendido'"
                   decoration-muted="expediente_estado == 'archivado'">
                 <field name="expediente_numero"/>
@@ -16,7 +16,7 @@
                 <field name="expediente_fecha_apertura"/>
                 <field name="expediente_fecha_cierre"/>
                 <field name="expediente_cantidad_hijos"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -72,12 +72,12 @@
                             <group>
                                 <field name="expediente_hijos_ids" nolabel="1" 
                                        context="{'default_expediente_padre_id': id, 'default_es_expediente': True}">
-                                    <tree>
+                                    <list>
                                         <field name="expediente_numero"/>
                                         <field name="name"/>
                                         <field name="expediente_estado"/>
                                         <field name="expediente_fecha_apertura"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </group>
                             <group string="Expedientes Relacionados (sin jerarquía)">
@@ -185,7 +185,7 @@
     <record id="action_project_expediente" model="ir.actions.act_window">
         <field name="name">Expedientes</field>
         <field name="res_model">project.project</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('es_expediente', '=', True)]</field>
         <field name="context">{'default_es_expediente': True, 'search_default_expedientes': 1}</field>
         <field name="help" type="html">
@@ -245,7 +245,7 @@
                                 <field name="expediente_numero"/>
                                 <field name="name"/>
                                 <field name="expediente_estado"/>
-                            </tree>
+                            </list>
                         </field>
                         <field name="expediente_relacionados_ids" nolabel="1" 
                                widget="many2many_tags" 

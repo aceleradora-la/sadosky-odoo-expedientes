@@ -156,7 +156,7 @@ class ProjectExpediente(models.Model):
             'name': _('Expedientes Hijos de %s') % self.name,
             'type': 'ir.actions.act_window',
             'res_model': 'project.project',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('expediente_padre_id', '=', self.id), ('es_expediente', '=', True)],
             'context': {
                 'default_expediente_padre_id': self.id,
@@ -191,7 +191,7 @@ class ProjectExpediente(models.Model):
             'name': _('Árbol de Expedientes - %s') % raiz.name,
             'type': 'ir.actions.act_window',
             'res_model': 'project.project',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('es_expediente', '=', True)],
             'context': {
                 'default_es_expediente': True,
