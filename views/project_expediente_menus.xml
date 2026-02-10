@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú principal de Expedientes -->
+    <menuitem id="menu_project_expediente_root"
+              name="Expedientes"
+              sequence="10"
+              web_icon="project,static/description/icon.png"/>
+
+    <menuitem id="menu_project_expediente"
+              name="Todos los Expedientes"
+              parent="menu_project_expediente_root"
+              action="action_project_expediente"
+              sequence="10"/>
+
+    <menuitem id="menu_project_expediente_raiz"
+              name="Expedientes Raíz"
+              parent="menu_project_expediente_root"
+              action="action_project_expediente"
+              sequence="20"
+              context="{'search_default_sin_padre': 1}"/>
+
+    <!-- Submenú de Configuración -->
+    <menuitem id="menu_project_expediente_config"
+              name="Configuración"
+              parent="menu_project_expediente_root"
+              sequence="90"/>
+
+    <!-- Agregar acceso a Expedientes desde el menú de Proyectos -->
+    <menuitem id="menu_project_expediente_from_project"
+              name="Expedientes"
+              parent="project.menu_main_pm"
+              action="action_project_expediente"
+              sequence="25"/>
+</odoo>

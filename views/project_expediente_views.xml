@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de árbol para Expedientes -->
+    <record id="view_project_expediente_tree" model="ir.ui.view">
+        <field name="name">project.expediente.tree</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <tree string="Expedientes" decoration-info="expediente_estado == 'en_tramite'" 
+                  decoration-warning="expediente_estado == 'suspendido'"
+                  decoration-muted="expediente_estado == 'archivado'">
+                <field name="expediente_numero"/>
+                <field name="name"/>
+                <field name="expediente_padre_id"/>
+                <field name="expediente_nivel"/>
+                <field name="expediente_estado"/>
+                <field name="expediente_fecha_apertura"/>
+                <field name="expediente_fecha_cierre"/>
+                <field name="expediente_cantidad_hijos"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de formulario para Expedientes -->
+    <record id="view_project_expediente_form" model="ir.ui.view">
+        <field name="name">project.expediente.form</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <form string="Expediente">
+                <header>
+                    <button name="action_ver_expediente_padre" type="object" 
+                            string="Ver Expediente Padre" 
+                            attrs="{'invisible': [('expediente_padre_id', '=', False)]}"
+                            class="oe_highlight"/>
+                    <button name="action_ver_expedientes_hijos" type="object" 
+                            string="Ver Expedientes Hijos" 
+                            attrs="{'invisible': [('expediente_cantidad_hijos', '=', 0)]}"
+                            class="oe_highlight"/>
+                    <button name="action_ver_arbol_expedientes" type="object" 
+                            string="Ver Árbol Completo" 
+                            class="oe_highlight"/>
+                    <field name="expediente_estado" widget="statusbar" 
+                           statusbar_visible="borrador,en_tramite,cerrado"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" 
+                                name="action_ver_expedientes_hijos" 
+                                icon="fa-sitemap"
+                                attrs="{'invisible': [('expediente_cantidad_hijos', '=', 0)]}">
+                            <field name="expediente_cantidad_hijos" widget="statinfo" string="Hijos"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="es_expediente" invisible="1"/>
+                            <field name="expediente_numero" placeholder="Ej: EXP-2024-001"/>
+                            <field name="name" required="1"/>
+                            <field name="expediente_padre_id" 
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="expediente_ruta_completa" readonly="1"/>
+                            <field name="expediente_nivel" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="expediente_fecha_apertura"/>
+                            <field name="expediente_fecha_cierre"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Expedientes Relacionados" name="expedientes_relacionados">
+                            <group>
+                                <field name="expediente_hijos_ids" nolabel="1" 
+                                       context="{'default_expediente_padre_id': id, 'default_es_expediente': True}">
+                                    <tree>
+                                        <field name="expediente_numero"/>
+                                        <field name="name"/>
+                                        <field name="expediente_estado"/>
+                                        <field name="expediente_fecha_apertura"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Expedientes Relacionados (sin jerarquía)">
+                                <field name="expediente_relacionados_ids" nolabel="1" 
+                                       widget="many2many_tags" 
+                                       options="{'no_create': True}"/>
+                            </group>
+                        </page>
+                        <page string="Información del Proyecto" name="project_info" 
+                              attrs="{'invisible': [('es_expediente', '=', False)]}">
+                            <group>
+                                <field name="description"/>
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda para Expedientes -->
+    <record id="view_project_expediente_search" model="ir.ui.view">
+        <field name="name">project.expediente.search</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <search string="Expedientes">
+                <field name="name" string="Nombre"/>
+                <field name="expediente_numero" string="Número"/>
+                <field name="expediente_padre_id" string="Expediente Padre"/>
+                <filter string="Expedientes" domain="[('es_expediente', '=', True)]"/>
+                <filter string="Sin Padre" 
+                        domain="[('expediente_padre_id', '=', False), ('es_expediente', '=', True)]"/>
+                <filter string="Con Hijos" 
+                        domain="[('expediente_cantidad_hijos', '>', 0), ('es_expediente', '=', True)]"/>
+                <separator/>
+                <filter string="Borrador" 
+                        domain="[('expediente_estado', '=', 'borrador'), ('es_expediente', '=', True)]"/>
+                <filter string="En Trámite" 
+                        domain="[('expediente_estado', '=', 'en_tramite'), ('es_expediente', '=', True)]"/>
+                <filter string="Suspendido" 
+                        domain="[('expediente_estado', '=', 'suspendido'), ('es_expediente', '=', True)]"/>
+                <filter string="Cerrado" 
+                        domain="[('expediente_estado', '=', 'cerrado'), ('es_expediente', '=', True)]"/>
+                <separator/>
+                <filter string="Mis Expedientes" 
+                        domain="[('user_id', '=', uid), ('es_expediente', '=', True)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Expediente Padre" 
+                            context="{'group_by': 'expediente_padre_id'}"/>
+                    <filter string="Estado" 
+                            context="{'group_by': 'expediente_estado'}"/>
+                    <filter string="Responsable" 
+                            context="{'group_by': 'user_id'}"/>
+                    <filter string="Nivel" 
+                            context="{'group_by': 'expediente_nivel'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Vista kanban para Expedientes -->
+    <record id="view_project_expediente_kanban" model="ir.ui.view">
+        <field name="name">project.expediente.kanban</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="expediente_estado" class="o_kanban_small_column">
+                <field name="expediente_numero"/>
+                <field name="name"/>
+                <field name="expediente_padre_id"/>
+                <field name="expediente_estado"/>
+                <field name="expediente_cantidad_hijos"/>
+                <field name="user_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <strong><field name="expediente_numero"/></strong>
+                                    <field name="name"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <div t-if="record.expediente_padre_id.raw_value">
+                                    <i class="fa fa-level-up"/> 
+                                    <field name="expediente_padre_id"/>
+                                </div>
+                                <div t-if="record.expediente_cantidad_hijos.raw_value > 0">
+                                    <i class="fa fa-sitemap"/> 
+                                    <field name="expediente_cantidad_hijos"/> hijo(s)
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_footer">
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Acción para Expedientes -->
+    <record id="action_project_expediente" model="ir.actions.act_window">
+        <field name="name">Expedientes</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('es_expediente', '=', True)]</field>
+        <field name="context">{'default_es_expediente': True, 'search_default_expedientes': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo Expediente
+            </p>
+            <p>
+                Los Expedientes son Proyectos especiales que pueden relacionarse entre sí
+                formando una jerarquía padre-hijo o relaciones laterales.
+            </p>
+        </field>
+    </record>
+
+    <!-- Extender vista de proyectos para mostrar expedientes -->
+    <record id="view_project_tree_inherit_expediente" model="ir.ui.view">
+        <field name="name">project.project.tree.inherit.expediente</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="es_expediente" invisible="1"/>
+                <field name="expediente_numero" optional="show"/>
+                <field name="expediente_padre_id" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_project_form_inherit_expediente" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.expediente</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="es_expediente" widget="boolean_toggle"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Expediente" name="expediente_info" 
+                      attrs="{'invisible': [('es_expediente', '=', False)]}">
+                    <group>
+                        <group>
+                            <field name="expediente_numero"/>
+                            <field name="expediente_padre_id" 
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="expediente_ruta_completa" readonly="1"/>
+                            <field name="expediente_nivel" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="expediente_fecha_apertura"/>
+                            <field name="expediente_fecha_cierre"/>
+                            <field name="expediente_estado"/>
+                        </group>
+                    </group>
+                    <group string="Expedientes Relacionados">
+                        <field name="expediente_hijos_ids" nolabel="1" 
+                               context="{'default_expediente_padre_id': id, 'default_es_expediente': True}">
+                            <tree>
+                                <field name="expediente_numero"/>
+                                <field name="name"/>
+                                <field name="expediente_estado"/>
+                            </tree>
+                        </field>
+                        <field name="expediente_relacionados_ids" nolabel="1" 
+                               widget="many2many_tags" 
+                               options="{'no_create': True}"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
