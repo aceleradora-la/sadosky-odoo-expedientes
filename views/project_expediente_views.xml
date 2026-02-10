@@ -105,7 +105,7 @@
         <field name="name">project.expediente.search</field>
         <field name="model">project.project</field>
         <field name="arch" type="xml">
-            <search string="Expedientes">
+            <search>
                 <field name="name" string="Nombre"/>
                 <field name="expediente_numero" string="Número"/>
                 <field name="expediente_padre_id" string="Expediente Padre"/>
@@ -131,8 +131,6 @@
                             context="{'group_by': 'expediente_estado'}"/>
                     <filter string="Responsable" 
                             context="{'group_by': 'user_id'}"/>
-                    <filter string="Nivel" 
-                            context="{'group_by': 'expediente_nivel'}"/>
                 </group>
             </search>
         </field>
