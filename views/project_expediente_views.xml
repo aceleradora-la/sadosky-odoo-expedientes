@@ -29,11 +29,11 @@
                 <header>
                     <button name="action_ver_expediente_padre" type="object" 
                             string="Ver Expediente Padre" 
-                            attrs="{'invisible': [('expediente_padre_id', '=', False)]}"
+                            invisible="not expediente_padre_id"
                             class="oe_highlight"/>
                     <button name="action_ver_expedientes_hijos" type="object" 
                             string="Ver Expedientes Hijos" 
-                            attrs="{'invisible': [('expediente_cantidad_hijos', '=', 0)]}"
+                            invisible="expediente_cantidad_hijos == 0"
                             class="oe_highlight"/>
                     <button name="action_ver_arbol_expedientes" type="object" 
                             string="Ver Árbol Completo" 
@@ -46,7 +46,7 @@
                         <button class="oe_stat_button" type="object" 
                                 name="action_ver_expedientes_hijos" 
                                 icon="fa-sitemap"
-                                attrs="{'invisible': [('expediente_cantidad_hijos', '=', 0)]}">
+                                invisible="expediente_cantidad_hijos == 0">
                             <field name="expediente_cantidad_hijos" widget="statinfo" string="Hijos"/>
                         </button>
                     </div>
@@ -87,7 +87,7 @@
                             </group>
                         </page>
                         <page string="Información del Proyecto" name="project_info" 
-                              attrs="{'invisible': [('es_expediente', '=', False)]}">
+                              invisible="not es_expediente">
                             <group>
                                 <field name="description"/>
                                 <field name="tag_ids" widget="many2many_tags"/>
@@ -223,7 +223,7 @@
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="Expediente" name="expediente_info" 
-                      attrs="{'invisible': [('es_expediente', '=', False)]}">
+                      invisible="not es_expediente">
                     <group>
                         <group>
                             <field name="expediente_numero"/>
