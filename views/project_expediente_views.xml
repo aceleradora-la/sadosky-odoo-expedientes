@@ -241,7 +241,7 @@
                     <group string="Expedientes Relacionados">
                         <field name="expediente_hijos_ids" nolabel="1" 
                                context="{'default_expediente_padre_id': id, 'default_es_expediente': True}">
-                            <tree>
+                            <list>
                                 <field name="expediente_numero"/>
                                 <field name="name"/>
                                 <field name="expediente_estado"/>
