@@ -106,32 +106,18 @@
         <field name="model">project.project</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name" string="Nombre"/>
-                <field name="expediente_numero" string="Número"/>
-                <field name="expediente_padre_id" string="Expediente Padre"/>
+                <field name="name"/>
+                <field name="expediente_numero"/>
+                <field name="expediente_padre_id"/>
                 <filter string="Expedientes" domain="[('es_expediente', '=', True)]"/>
-                <filter string="Sin Padre" 
-                        domain="[('expediente_padre_id', '=', False), ('es_expediente', '=', True)]"/>
+                <filter string="Sin Padre" domain="[('expediente_padre_id', '=', False), ('es_expediente', '=', True)]"/>
                 <separator/>
-                <filter string="Borrador" 
-                        domain="[('expediente_estado', '=', 'borrador'), ('es_expediente', '=', True)]"/>
-                <filter string="En Trámite" 
-                        domain="[('expediente_estado', '=', 'en_tramite'), ('es_expediente', '=', True)]"/>
-                <filter string="Suspendido" 
-                        domain="[('expediente_estado', '=', 'suspendido'), ('es_expediente', '=', True)]"/>
-                <filter string="Cerrado" 
-                        domain="[('expediente_estado', '=', 'cerrado'), ('es_expediente', '=', True)]"/>
+                <filter string="Borrador" domain="[('expediente_estado', '=', 'borrador'), ('es_expediente', '=', True)]"/>
+                <filter string="En Trámite" domain="[('expediente_estado', '=', 'en_tramite'), ('es_expediente', '=', True)]"/>
+                <filter string="Suspendido" domain="[('expediente_estado', '=', 'suspendido'), ('es_expediente', '=', True)]"/>
+                <filter string="Cerrado" domain="[('expediente_estado', '=', 'cerrado'), ('es_expediente', '=', True)]"/>
                 <separator/>
-                <filter string="Mis Expedientes" 
-                        domain="[('user_id', '=', uid), ('es_expediente', '=', True)]"/>
-                <group expand="0" string="Agrupar por">
-                    <filter string="Expediente Padre" 
-                            context="{'group_by': 'expediente_padre_id'}"/>
-                    <filter string="Estado" 
-                            context="{'group_by': 'expediente_estado'}"/>
-                    <filter string="Responsable" 
-                            context="{'group_by': 'user_id'}"/>
-                </group>
+                <filter string="Mis Expedientes" domain="[('user_id', '=', uid), ('es_expediente', '=', True)]"/>
             </search>
         </field>
     </record>
