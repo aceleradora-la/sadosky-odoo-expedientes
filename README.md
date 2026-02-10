@@ -126,7 +126,7 @@ expedientes/
 
 ## Versión
 
-- **Versión**: 18.0.1.0.0
+- **Versión**: 18.0.1.0
 - **Compatible con**: Odoo 18.0
 
 ## Autor
