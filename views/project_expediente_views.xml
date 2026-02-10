@@ -100,19 +100,6 @@
         </field>
     </record>
 
-    <!-- Vista de búsqueda para Expedientes -->
-    <record id="view_project_expediente_search" model="ir.ui.view">
-        <field name="name">project.expediente.search</field>
-        <field name="model">project.project</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="name"/>
-                <field name="expediente_numero"/>
-                <filter string="Expedientes" domain="[('es_expediente', '=', True)]"/>
-            </search>
-        </field>
-    </record>
-
     <!-- Vista kanban para Expedientes -->
     <record id="view_project_expediente_kanban" model="ir.ui.view">
         <field name="name">project.expediente.kanban</field>
