@@ -113,7 +113,7 @@
                 <filter string="Sin Padre" 
                         domain="[('expediente_padre_id', '=', False), ('es_expediente', '=', True)]"/>
                 <filter string="Con Hijos" 
-                        domain="[('expediente_cantidad_hijos', '>', 0), ('es_expediente', '=', True)]"/>
+                        domain="[('expediente_hijos_ids', '!=', False), ('es_expediente', '=', True)]"/>
                 <separator/>
                 <filter string="Borrador" 
                         domain="[('expediente_estado', '=', 'borrador'), ('es_expediente', '=', True)]"/>
