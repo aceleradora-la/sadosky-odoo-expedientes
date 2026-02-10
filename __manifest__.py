@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Expedientes como Proyectos',
-    'version': '17.0.1.0.0',
+    'version': '18.0.1.0.0',
     'category': 'Project',
     'summary': 'Extiende el módulo de proyectos para gestionar Expedientes como Proyectos con relaciones entre sí',
     'description': """
